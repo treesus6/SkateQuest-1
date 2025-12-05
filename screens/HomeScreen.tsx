@@ -4,6 +4,7 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
+  ScrollView,
   Alert,
 } from 'react-native';
 import { NavigationProp } from '@react-navigation/native';
@@ -33,31 +34,47 @@ export default function HomeScreen({ navigation }: Props) {
     );
   };
 
+  const menuItems = [
+    { icon: '🗺️', title: 'Discover', subtitle: 'Find skateparks near you', screen: 'Map' },
+    { icon: '➕', title: 'Add Spot', subtitle: 'Submit a new skatepark', screen: 'AddSpot' },
+    { icon: '🎯', title: 'Challenges', subtitle: 'Complete tricks & earn XP', screen: 'Challenges' },
+    { icon: '👥', title: 'Crews', subtitle: 'Join or create a crew', screen: 'Crews' },
+    { icon: '📅', title: 'Events', subtitle: 'Upcoming skate events', screen: 'Events' },
+    { icon: '🛒', title: 'Shops', subtitle: 'Find local skate shops', screen: 'Shops' },
+    { icon: '📚', title: 'Tricks', subtitle: 'Learn new tricks', screen: 'TricksLibrary' },
+    { icon: '🏆', title: 'Leaderboard', subtitle: 'Top skaters & crews', screen: 'Leaderboard' },
+    { icon: '👤', title: 'Profile', subtitle: 'View your stats', screen: 'Profile' },
+  ];
+
   return (
     <View style={styles.container}>
-      <View style={styles.content}>
-        <Text style={styles.title}>Welcome to SkateQuest!</Text>
-        <Text style={styles.subtitle}>You're signed in</Text>
-        
-        <View style={styles.userInfo}>
-          <Text style={styles.label}>Email:</Text>
-          <Text style={styles.email}>{user?.email}</Text>
-        </View>
-
-        <TouchableOpacity
-          style={styles.parksButton}
-          onPress={() => navigation.navigate('ParksList')}
-        >
-          <Text style={styles.parksButtonText}>🛹 Browse Skateparks</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.signOutButton}
-          onPress={handleSignOut}
-        >
-          <Text style={styles.signOutButtonText}>Sign Out</Text>
+      <View style={styles.header}>
+        <Text style={styles.title}>SkateQuest 🛹</Text>
+        <TouchableOpacity style={styles.signOutBtn} onPress={handleSignOut}>
+          <Text style={styles.signOutText}>Sign Out</Text>
         </TouchableOpacity>
       </View>
+
+      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+        <View style={styles.welcomeCard}>
+          <Text style={styles.welcomeText}>Welcome back!</Text>
+          <Text style={styles.emailText}>{user?.email}</Text>
+        </View>
+
+        <View style={styles.grid}>
+          {menuItems.map((item, index) => (
+            <TouchableOpacity
+              key={index}
+              style={styles.menuCard}
+              onPress={() => navigation.navigate(item.screen)}
+            >
+              <Text style={styles.menuIcon}>{item.icon}</Text>
+              <Text style={styles.menuTitle}>{item.title}</Text>
+              <Text style={styles.menuSubtitle}>{item.subtitle}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      </ScrollView>
     </View>
   );
 }
@@ -65,69 +82,89 @@ export default function HomeScreen({ navigation }: Props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#f5f5f5',
   },
-  content: {
-    flex: 1,
-    padding: 20,
-    justifyContent: 'center',
+  header: {
+    backgroundColor: '#d2673d',
+    paddingTop: 60,
+    paddingBottom: 20,
+    paddingHorizontal: 20,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
   },
   title: {
-    fontSize: 36,
+    fontSize: 28,
     fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 10,
-    color: '#000',
+    color: '#fff',
   },
-  subtitle: {
-    fontSize: 16,
-    textAlign: 'center',
-    marginBottom: 40,
-    color: '#666',
+  signOutBtn: {
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    paddingHorizontal: 15,
+    paddingVertical: 8,
+    borderRadius: 20,
   },
-  userInfo: {
-    backgroundColor: '#f5f5f5',
+  signOutText: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  content: {
+    flex: 1,
+  },
+  welcomeCard: {
+    backgroundColor: '#fff',
+    margin: 15,
     padding: 20,
     borderRadius: 12,
-    width: '100%',
-    marginBottom: 30,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
-  label: {
+  welcomeText: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#000',
+    marginBottom: 5,
+  },
+  emailText: {
+    fontSize: 14,
+    color: '#666',
+  },
+  grid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    padding: 10,
+  },
+  menuCard: {
+    width: '47%',
+    backgroundColor: '#fff',
+    margin: '1.5%',
+    padding: 20,
+    borderRadius: 12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+    alignItems: 'center',
+  },
+  menuIcon: {
+    fontSize: 40,
+    marginBottom: 10,
+  },
+  menuTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#000',
+    marginBottom: 5,
+    textAlign: 'center',
+  },
+  menuSubtitle: {
     fontSize: 12,
     color: '#666',
-    marginBottom: 5,
-    textTransform: 'uppercase',
-    letterSpacing: 1,
-  },
-  email: {
-    fontSize: 16,
-    color: '#000',
-    fontWeight: '500',
-  },
-  parksButton: {
-    backgroundColor: '#007AFF',
-    borderRadius: 8,
-    padding: 15,
-    width: '100%',
-    alignItems: 'center',
-    marginBottom: 15,
-  },
-  parksButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  signOutButton: {
-    backgroundColor: '#FF3B30',
-    borderRadius: 8,
-    padding: 15,
-    width: '100%',
-    alignItems: 'center',
-  },
-  signOutButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
+    textAlign: 'center',
   },
 });

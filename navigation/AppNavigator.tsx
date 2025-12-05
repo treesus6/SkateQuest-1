@@ -8,8 +8,17 @@ import LoginScreen from '../screens/LoginScreen';
 import SignUpScreen from '../screens/SignUpScreen';
 import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
 import HomeScreen from '../screens/HomeScreen';
+import MapScreen from '../screens/MapScreen';
 import ParksListScreen from '../screens/ParksListScreen';
 import ParkDetailScreen from '../screens/ParkDetailScreen';
+import ProfileScreen from '../screens/ProfileScreen';
+import ChallengesScreen from '../screens/ChallengesScreen';
+import LeaderboardScreen from '../screens/LeaderboardScreen';
+import CrewsScreen from '../screens/CrewsScreen';
+import EventsScreen from '../screens/EventsScreen';
+import ShopsScreen from '../screens/ShopsScreen';
+import AddSpotScreen from '../screens/AddSpotScreen';
+import TricksLibraryScreen from '../screens/TricksLibraryScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -35,8 +44,17 @@ export default function AppNavigator() {
           // Authenticated screens
           <>
             <Stack.Screen name="Home" component={HomeScreen} />
+            <Stack.Screen name="Map" component={MapScreen} />
             <Stack.Screen name="ParksList" component={ParksListScreen} />
             <Stack.Screen name="ParkDetail" component={ParkDetailScreen} />
+            <Stack.Screen name="Profile" component={ProfileScreen} />
+            <Stack.Screen name="Challenges" component={ChallengesScreen} />
+            <Stack.Screen name="Leaderboard" component={LeaderboardScreen} />
+            <Stack.Screen name="Crews" component={CrewsScreen} />
+            <Stack.Screen name="Events" component={EventsScreen} />
+            <Stack.Screen name="Shops" component={ShopsScreen} />
+            <Stack.Screen name="AddSpot" component={AddSpotScreen} />
+            <Stack.Screen name="TricksLibrary" component={TricksLibraryScreen} />
           </>
         ) : (
           // Auth screens
