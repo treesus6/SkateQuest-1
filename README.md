@@ -1,14 +1,17 @@
 # SkateQuest
 
-A React Native mobile app built with Expo and Supabase authentication.
+A cross-platform app built with React Native, Expo, and Supabase authentication.
+
+**✨ Runs on iOS, Android, AND Web from a single codebase! ✨**
 
 ## Features
 
-- User authentication (Sign up, Sign in, Sign out)
-- Password reset functionality
-- Protected routes
-- Persistent sessions using AsyncStorage
-- Modern UI with React Navigation
+- 🌐 **Cross-platform**: Works on iOS, Android, and Web browsers
+- 🔐 User authentication (Sign up, Sign in, Sign out)
+- 🔑 Password reset functionality
+- 🛡️ Protected routes
+- 💾 Persistent sessions using AsyncStorage
+- 🎨 Modern UI with React Navigation
 
 ## Prerequisites
 
@@ -49,15 +52,33 @@ EXPO_PUBLIC_SUPABASE_KEY=your-anon-key-here
 
 ## Running the App
 
-Start the development server:
+### Option 1: All Platforms (Interactive Menu)
 ```bash
 npm start
 ```
+Then choose:
+- Press `w` for **Web** (opens in browser)
+- Press `i` for **iOS** simulator
+- Press `a` for **Android** emulator
+- Scan QR code with **Expo Go** app on your physical device
 
-Then:
-- Press `i` for iOS simulator
-- Press `a` for Android emulator
-- Scan QR code with Expo Go app on your physical device
+### Option 2: Direct Launch
+
+**Web Browser:**
+```bash
+npm run web
+```
+This opens the app at `http://localhost:8081` in your browser.
+
+**iOS:**
+```bash
+npm run ios
+```
+
+**Android:**
+```bash
+npm run android
+```
 
 ## Project Structure
 
@@ -135,12 +156,43 @@ npm install @react-navigation/native @react-navigation/native-stack
 expo install react-native-screens react-native-safe-area-context
 ```
 
+## Deployment
+
+### Web Deployment
+
+Build for production:
+```bash
+npx expo export:web
+```
+
+This creates a `web-build` folder. Deploy it to:
+- **Netlify**: Drag and drop the `web-build` folder
+- **Vercel**: `npx vercel --prod`
+- **GitHub Pages**: Push `web-build` to gh-pages branch
+- **Any static host**: Upload the `web-build` folder
+
+### Mobile Deployment
+
+**Build for iOS/Android:**
+```bash
+npx eas build --platform ios
+npx eas build --platform android
+```
+
+**Publish updates:**
+```bash
+npx eas update
+```
+
+See [Expo EAS docs](https://docs.expo.dev/eas/) for full deployment guide.
+
 ## Learn More
 
 - [Expo Documentation](https://docs.expo.dev/)
 - [Supabase Documentation](https://supabase.com/docs)
 - [React Navigation](https://reactnavigation.org/)
 - [React Native](https://reactnative.dev/)
+- [Expo Web](https://docs.expo.dev/workflow/web/)
 
 ## License
 
