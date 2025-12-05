@@ -6,9 +6,14 @@ import {
   StyleSheet,
   Alert,
 } from 'react-native';
+import { NavigationProp } from '@react-navigation/native';
 import { useAuth } from '../contexts/AuthContext';
 
-export default function HomeScreen() {
+interface Props {
+  navigation: NavigationProp<any>;
+}
+
+export default function HomeScreen({ navigation }: Props) {
   const { user, signOut } = useAuth();
 
   const handleSignOut = async () => {
@@ -38,6 +43,13 @@ export default function HomeScreen() {
           <Text style={styles.label}>Email:</Text>
           <Text style={styles.email}>{user?.email}</Text>
         </View>
+
+        <TouchableOpacity
+          style={styles.parksButton}
+          onPress={() => navigation.navigate('ParksList')}
+        >
+          <Text style={styles.parksButtonText}>🛹 Browse Skateparks</Text>
+        </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.signOutButton}
@@ -92,6 +104,19 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#000',
     fontWeight: '500',
+  },
+  parksButton: {
+    backgroundColor: '#007AFF',
+    borderRadius: 8,
+    padding: 15,
+    width: '100%',
+    alignItems: 'center',
+    marginBottom: 15,
+  },
+  parksButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
   },
   signOutButton: {
     backgroundColor: '#FF3B30',

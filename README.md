@@ -7,11 +7,16 @@ A cross-platform app built with React Native, Expo, and Supabase authentication.
 ## Features
 
 - 🌐 **Cross-platform**: Works on iOS, Android, and Web browsers
-- 🔐 User authentication (Sign up, Sign in, Sign out)
-- 🔑 Password reset functionality
-- 🛡️ Protected routes
-- 💾 Persistent sessions using AsyncStorage
-- 🎨 Modern UI with React Navigation
+- 🔐 **User authentication** (Sign up, Sign in, Sign out)
+- 🔑 **Password reset** functionality
+- 🛡️ **Protected routes** for authenticated users
+- 💾 **Persistent sessions** using AsyncStorage
+- 🎨 **Modern UI** with React Navigation
+- 🛹 **Skateparks discovery** - Browse 8 legendary skateparks across the US
+- 📍 **Park details** - View location, difficulty, features, hours, and pricing
+- ⭐ **Favorites** - Save your favorite skateparks (stored in Supabase)
+- 🔍 **Search & filter** - Find parks by name, location, or difficulty level
+- 🗺️ **Maps integration** - Open park locations in Google Maps
 
 ## Prerequisites
 
@@ -25,6 +30,8 @@ A cross-platform app built with React Native, Expo, and Supabase authentication.
 1. Create a new project at [supabase.com](https://supabase.com)
 2. Go to Settings > API in your Supabase dashboard
 3. Copy your project URL and anon/public key
+4. Go to SQL Editor in your Supabase dashboard
+5. Copy the contents of `database-setup.sql` and run it to create the favorites table
 
 ## Installation
 
@@ -86,6 +93,8 @@ npm run android
 SkateQuest-1/
 ├── contexts/
 │   └── AuthContext.tsx       # Authentication context and provider
+├── data/
+│   └── parks.json            # Skatepark data (8 parks)
 ├── lib/
 │   └── supabase.ts           # Supabase client configuration
 ├── navigation/
@@ -94,8 +103,11 @@ SkateQuest-1/
 │   ├── LoginScreen.tsx       # Login screen
 │   ├── SignUpScreen.tsx      # Sign up screen
 │   ├── ForgotPasswordScreen.tsx  # Password reset screen
-│   └── HomeScreen.tsx        # Home screen (authenticated)
+│   ├── HomeScreen.tsx        # Home screen (authenticated)
+│   ├── ParksListScreen.tsx   # Browse all skateparks
+│   └── ParkDetailScreen.tsx  # Individual park details
 ├── App.tsx                   # Main app component
+├── database-setup.sql        # Supabase database schema
 ├── package.json              # Dependencies
 └── .env                      # Environment variables (create this)
 ```
@@ -127,6 +139,40 @@ The app features a complete authentication system with protected routes:
    - Sessions persisted using AsyncStorage
    - Auto-refresh tokens
    - Automatic navigation based on auth state
+
+## Skateparks Features
+
+The app includes a comprehensive skatepark discovery system:
+
+1. **Parks List** (`screens/ParksListScreen.tsx`):
+   - Browse 8 legendary skateparks across the US
+   - Real skatepark images from Unsplash
+   - Search parks by name or location
+   - Filter by difficulty level (Beginner, Intermediate, Advanced, Expert)
+   - View park rating, pricing, and difficulty at a glance
+
+2. **Park Details** (`screens/ParkDetailScreen.tsx`):
+   - Detailed information about each park
+   - Park features (Bowl, Street Course, Vert Ramp, etc.)
+   - Operating hours and pricing
+   - Full address with Google Maps integration
+   - Save parks to favorites
+
+3. **Favorites System**:
+   - Heart icon to add/remove favorites
+   - Favorites stored in Supabase database
+   - Synced across all devices
+   - Requires authentication
+
+4. **Parks Data** (`data/parks.json`):
+   - Venice Beach Skatepark (CA)
+   - Burnside Skatepark (OR)
+   - Vans Skatepark (CA)
+   - Lincoln City Skatepark (NE)
+   - Brooklyn Banks (NY)
+   - Kona Skatepark (FL)
+   - Lake Cunningham Skatepark (CA)
+   - FDR Skatepark (PA)
 
 ## Supabase Configuration
 
