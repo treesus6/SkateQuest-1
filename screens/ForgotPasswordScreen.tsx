@@ -5,14 +5,19 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  ActivityIndicator,
   Alert,
+  ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
 import { useAuth } from '../contexts/AuthContext';
+import { NavigationProp } from '@react-navigation/native';
 
-export const ForgotPasswordScreen = ({ navigation }: any) => {
+interface Props {
+  navigation: NavigationProp<any>;
+}
+
+export default function ForgotPasswordScreen({ navigation }: Props) {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const { resetPassword } = useAuth();
@@ -32,7 +37,7 @@ export const ForgotPasswordScreen = ({ navigation }: any) => {
     } else {
       Alert.alert(
         'Success',
-        'Password reset instructions have been sent to your email.',
+        'Password reset email sent! Check your inbox for instructions.',
         [{ text: 'OK', onPress: () => navigation.navigate('Login') }]
       );
     }
@@ -46,7 +51,7 @@ export const ForgotPasswordScreen = ({ navigation }: any) => {
       <View style={styles.content}>
         <Text style={styles.title}>Reset Password</Text>
         <Text style={styles.subtitle}>
-          Enter your email address and we'll send you instructions to reset your password.
+          Enter your email and we'll send you instructions to reset your password
         </Text>
 
         <TextInput
@@ -67,38 +72,38 @@ export const ForgotPasswordScreen = ({ navigation }: any) => {
           {loading ? (
             <ActivityIndicator color="#fff" />
           ) : (
-            <Text style={styles.buttonText}>Send Reset Link</Text>
+            <Text style={styles.buttonText}>Send Reset Email</Text>
           )}
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={styles.backButton}
           onPress={() => navigation.navigate('Login')}
           disabled={loading}
+          style={styles.backButton}
         >
-          <Text style={styles.backText}>Back to Login</Text>
+          <Text style={styles.linkText}>Back to Login</Text>
         </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#fff',
   },
   content: {
     flex: 1,
-    justifyContent: 'center',
     padding: 20,
+    justifyContent: 'center',
   },
   title: {
-    fontSize: 32,
+    fontSize: 36,
     fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 10,
-    color: '#333',
+    color: '#000',
   },
   subtitle: {
     fontSize: 14,
@@ -108,13 +113,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   input: {
-    backgroundColor: '#fff',
-    borderWidth: 1,
-    borderColor: '#ddd',
+    backgroundColor: '#f5f5f5',
     borderRadius: 8,
     padding: 15,
-    marginBottom: 15,
     fontSize: 16,
+    marginBottom: 15,
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
   },
   button: {
     backgroundColor: '#007AFF',
@@ -124,19 +129,19 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   buttonDisabled: {
-    backgroundColor: '#ccc',
+    opacity: 0.6,
   },
   buttonText: {
     color: '#fff',
     fontSize: 16,
     fontWeight: '600',
   },
+  linkText: {
+    color: '#007AFF',
+    textAlign: 'center',
+    fontSize: 14,
+  },
   backButton: {
     marginTop: 20,
-    alignItems: 'center',
-  },
-  backText: {
-    color: '#007AFF',
-    fontSize: 14,
   },
 });

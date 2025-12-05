@@ -102,12 +102,31 @@ SkateQuest-1/
 
 ## Authentication Flow
 
-1. **Sign Up**: Users create an account with email and password
-2. **Email Verification**: Supabase sends a verification email (optional, configure in Supabase dashboard)
-3. **Sign In**: Users log in with their credentials
-4. **Session Management**: Sessions are persisted using AsyncStorage
-5. **Protected Routes**: Home screen is only accessible when authenticated
-6. **Sign Out**: Users can sign out, which clears the session
+The app features a complete authentication system with protected routes:
+
+1. **Sign Up** (`screens/SignUpScreen.tsx`):
+   - Users create an account with email and password
+   - Password confirmation validation
+   - Email verification sent by Supabase
+
+2. **Sign In** (`screens/LoginScreen.tsx`):
+   - Users log in with their credentials
+   - Forgot password link
+   - Auto-redirect to sign up
+
+3. **Password Reset** (`screens/ForgotPasswordScreen.tsx`):
+   - Email-based password reset
+   - Uses Supabase password recovery
+
+4. **Protected Home Screen** (`screens/HomeScreen.tsx`):
+   - Only accessible when authenticated
+   - Displays user email
+   - Sign out functionality
+
+5. **Session Management**:
+   - Sessions persisted using AsyncStorage
+   - Auto-refresh tokens
+   - Automatic navigation based on auth state
 
 ## Supabase Configuration
 
