@@ -26,8 +26,7 @@
       "package": "com.skatequest.app"
     },
     "web": {
-      "bundler": "metro",
-      "output": "static"
+      "bundler": "metro"
     },
     "platforms": ["ios", "android", "web"]
   }
