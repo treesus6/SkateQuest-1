@@ -1,6 +1,29 @@
 -- SkateQuest Database Setup
 -- Run this SQL in your Supabase SQL Editor
 
+-- Create parks table
+CREATE TABLE IF NOT EXISTS parks (
+  id TEXT PRIMARY KEY,
+  name TEXT NOT NULL,
+  type TEXT NOT NULL,
+  lat DOUBLE PRECISION NOT NULL,
+  lng DOUBLE PRECISION NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Enable Row Level Security for parks (public read)
+ALTER TABLE parks ENABLE ROW LEVEL SECURITY;
+
+-- Create policies for parks (everyone can read)
+CREATE POLICY "Anyone can view parks"
+  ON parks
+  FOR SELECT
+  USING (true);
+
+-- Create spatial index for location queries
+CREATE INDEX IF NOT EXISTS idx_parks_location ON parks(lat, lng);
+CREATE INDEX IF NOT EXISTS idx_parks_name ON parks(name);
+
 -- Create favorites table
 CREATE TABLE IF NOT EXISTS favorites (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,

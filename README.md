@@ -1,8 +1,10 @@
-# SkateQuest
+# SkateQuest Mobile
 
-A cross-platform app built with React Native, Expo, and Supabase authentication.
+A cross-platform **mobile app** built with React Native, Expo, and Supabase authentication.
 
 **✨ Runs on iOS, Android, AND Web from a single codebase! ✨**
+
+> **Note**: This is the mobile version of SkateQuest. The original web app at [sk8.quest](https://sk8.quest) remains unchanged. This app uses the same 2585 parks data from the original SkateQuest database.
 
 ## Features
 
@@ -12,7 +14,7 @@ A cross-platform app built with React Native, Expo, and Supabase authentication.
 - 🛡️ **Protected routes** for authenticated users
 - 💾 **Persistent sessions** using AsyncStorage
 - 🎨 **Modern UI** with React Navigation
-- 🛹 **Skateparks discovery** - Browse 8 legendary skateparks across the US
+- 🛹 **Skateparks discovery** - Browse 2585 skateparks from around the world
 - 📍 **Park details** - View location, difficulty, features, hours, and pricing
 - ⭐ **Favorites** - Save your favorite skateparks (stored in Supabase)
 - 🔍 **Search & filter** - Find parks by name, location, or difficulty level
@@ -142,21 +144,20 @@ The app features a complete authentication system with protected routes:
 
 ## Skateparks Features
 
-The app includes a comprehensive skatepark discovery system:
+The app includes a comprehensive skatepark discovery system with **2585 skateparks worldwide**:
 
 1. **Parks List** (`screens/ParksListScreen.tsx`):
-   - Browse 8 legendary skateparks across the US
-   - Real skatepark images from Unsplash
-   - Search parks by name or location
-   - Filter by difficulty level (Beginner, Intermediate, Advanced, Expert)
-   - View park rating, pricing, and difficulty at a glance
+   - Browse 2585 skateparks from around the world
+   - Real OpenStreetMap data
+   - Search parks by name
+   - View coordinates for each park
+   - Clean, simple list interface
 
 2. **Park Details** (`screens/ParkDetailScreen.tsx`):
-   - Detailed information about each park
-   - Park features (Bowl, Street Course, Vert Ramp, etc.)
-   - Operating hours and pricing
-   - Full address with Google Maps integration
-   - Save parks to favorites
+   - Park name, type, and coordinates
+   - One-tap Google Maps integration
+   - Save parks to favorites with heart icon
+   - GPS coordinates for navigation
 
 3. **Favorites System**:
    - Heart icon to add/remove favorites
@@ -165,14 +166,10 @@ The app includes a comprehensive skatepark discovery system:
    - Requires authentication
 
 4. **Parks Data** (`data/parks.json`):
-   - Venice Beach Skatepark (CA)
-   - Burnside Skatepark (OR)
-   - Vans Skatepark (CA)
-   - Lincoln City Skatepark (NE)
-   - Brooklyn Banks (NY)
-   - Kona Skatepark (FL)
-   - Lake Cunningham Skatepark (CA)
-   - FDR Skatepark (PA)
+   - 2585 skateparks from OpenStreetMap
+   - Includes name, type, latitude, longitude
+   - Migrated from original SkateQuest Firebase database
+   - Optional: Import to Supabase using `scripts/import-parks.js`
 
 ## Supabase Configuration
 

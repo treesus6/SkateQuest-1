@@ -4,7 +4,6 @@ import {
   Text,
   ScrollView,
   StyleSheet,
-  Image,
   TouchableOpacity,
   Alert,
   Linking,
@@ -16,18 +15,9 @@ import { supabase } from '../lib/supabase';
 interface Park {
   id: string;
   name: string;
-  location: string;
-  address: string;
-  description: string;
-  difficulty: string;
-  features: string[];
-  rating: number;
-  image: string;
-  hours: string;
-  isFree: boolean;
-  price?: string;
-  latitude: number;
-  longitude: number;
+  type: string;
+  lat: number;
+  lng: number;
 }
 
 interface Props {
@@ -90,7 +80,7 @@ export default function ParkDetailScreen({ navigation, route }: Props) {
             user_id: user.id,
             park_id: park.id,
             park_name: park.name,
-            park_location: park.location,
+            park_location: `${park.lat}, ${park.lng}`,
           });
 
         if (error) throw error;
@@ -105,14 +95,17 @@ export default function ParkDetailScreen({ navigation, route }: Props) {
   };
 
   const openMaps = () => {
-    const url = `https://www.google.com/maps/search/?api=1&query=${park.latitude},${park.longitude}`;
+    const url = `https://www.google.com/maps/search/?api=1&query=${park.lat},${park.lng}`;
     Linking.openURL(url);
   };
 
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <Image source={{ uri: park.image }} style={styles.headerImage} />
+        <View style={styles.mapPlaceholder}>
+          <Text style={styles.mapText}>📍 Map View</Text>
+          <Text style={styles.coordsText}>{park.lat.toFixed(6)}, {park.lng.toFixed(6)}</Text>
+        </View>
         
         <TouchableOpacity
           style={styles.backButton}
@@ -133,55 +126,25 @@ export default function ParkDetailScreen({ navigation, route }: Props) {
                 <Text style={styles.favoriteIcon}>{isFavorite ? '❤️' : '🤍'}</Text>
               </TouchableOpacity>
             </View>
-            <Text style={styles.location}>{park.location}</Text>
-          </View>
-
-          <View style={styles.metaRow}>
-            <View style={styles.metaItem}>
-              <Text style={styles.metaLabel}>Difficulty</Text>
-              <View style={styles.difficultyBadge}>
-                <Text style={styles.difficultyText}>{park.difficulty}</Text>
-              </View>
+            <View style={styles.typeBadge}>
+              <Text style={styles.typeText}>{park.type}</Text>
             </View>
-            <View style={styles.metaItem}>
-              <Text style={styles.metaLabel}>Rating</Text>
-              <Text style={styles.metaValue}>⭐ {park.rating}</Text>
-            </View>
-            <View style={styles.metaItem}>
-              <Text style={styles.metaLabel}>Price</Text>
-              <Text style={[styles.metaValue, styles.priceText]}>
-                {park.isFree ? 'FREE' : park.price}
-              </Text>
-            </View>
-          </View>
-
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>About</Text>
-            <Text style={styles.description}>{park.description}</Text>
-          </View>
-
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Features</Text>
-            <View style={styles.featuresContainer}>
-              {park.features.map((feature, index) => (
-                <View key={index} style={styles.featureChip}>
-                  <Text style={styles.featureText}>{feature}</Text>
-                </View>
-              ))}
-            </View>
-          </View>
-
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Hours</Text>
-            <Text style={styles.infoText}>{park.hours}</Text>
           </View>
 
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Location</Text>
-            <Text style={styles.infoText}>{park.address}</Text>
+            <Text style={styles.infoText}>Latitude: {park.lat}</Text>
+            <Text style={styles.infoText}>Longitude: {park.lng}</Text>
             <TouchableOpacity style={styles.mapButton} onPress={openMaps}>
-              <Text style={styles.mapButtonText}>Open in Maps</Text>
+              <Text style={styles.mapButtonText}>Open in Google Maps</Text>
             </TouchableOpacity>
+          </View>
+
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>About</Text>
+            <Text style={styles.infoText}>
+              This is a {park.type} location. Tap the map button above to get directions and see nearby amenities.
+            </Text>
           </View>
         </View>
       </ScrollView>
@@ -194,10 +157,22 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
-  headerImage: {
+  mapPlaceholder: {
     width: '100%',
     height: 300,
-    backgroundColor: '#e0e0e0',
+    backgroundColor: '#007AFF',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  mapText: {
+    fontSize: 32,
+    color: '#fff',
+    marginBottom: 10,
+  },
+  coordsText: {
+    fontSize: 16,
+    color: '#fff',
+    opacity: 0.9,
   },
   backButton: {
     position: 'absolute',
@@ -223,16 +198,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 5,
+    marginBottom: 10,
   },
   title: {
     fontSize: 28,
     fontWeight: 'bold',
     flex: 1,
-  },
-  location: {
-    fontSize: 16,
-    color: '#666',
   },
   favoriteButton: {
     width: 44,
@@ -248,41 +219,17 @@ const styles = StyleSheet.create({
   favoriteIcon: {
     fontSize: 24,
   },
-  metaRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 30,
-    paddingBottom: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
-  },
-  metaItem: {
-    alignItems: 'center',
-  },
-  metaLabel: {
-    fontSize: 12,
-    color: '#666',
-    marginBottom: 8,
-    textTransform: 'uppercase',
-    letterSpacing: 1,
-  },
-  metaValue: {
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  difficultyBadge: {
+  typeBadge: {
     backgroundColor: '#007AFF',
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 12,
+    alignSelf: 'flex-start',
   },
-  difficultyText: {
+  typeText: {
     color: '#fff',
     fontSize: 14,
     fontWeight: '600',
-  },
-  priceText: {
-    color: '#34C759',
   },
   section: {
     marginBottom: 25,
@@ -292,34 +239,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 12,
   },
-  description: {
-    fontSize: 16,
-    lineHeight: 24,
-    color: '#333',
-  },
-  featuresContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-  },
-  featureChip: {
-    backgroundColor: '#f5f5f5',
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 16,
-    marginRight: 8,
-    marginBottom: 8,
-  },
-  featureText: {
-    fontSize: 14,
-    color: '#333',
-  },
   infoText: {
     fontSize: 16,
     color: '#333',
     lineHeight: 22,
+    marginBottom: 5,
   },
   mapButton: {
-    backgroundColor: '#007AFF',
+    backgroundColor: '#34C759',
     padding: 15,
     borderRadius: 10,
     alignItems: 'center',
