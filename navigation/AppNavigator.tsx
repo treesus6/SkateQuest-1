@@ -21,6 +21,7 @@ import AddSpotScreen from '../screens/AddSpotScreen';
 import TricksLibraryScreen from '../screens/TricksLibraryScreen';
 import FeedScreen from '../screens/FeedScreen';
 import SessionsScreen from '../screens/SessionsScreen';
+import VideosScreen from '../screens/VideosScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -53,6 +54,7 @@ export default function AppNavigator() {
             <Stack.Screen name="Challenges" component={ChallengesScreen} />
             <Stack.Screen name="Feed" component={FeedScreen} />
             <Stack.Screen name="Sessions" component={SessionsScreen} />
+            <Stack.Screen name="Videos" component={VideosScreen} />
             <Stack.Screen name="Leaderboard" component={LeaderboardScreen} />
             <Stack.Screen name="Crews" component={CrewsScreen} />
             <Stack.Screen name="Events" component={EventsScreen} />

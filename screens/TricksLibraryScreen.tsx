@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Alert,
+  Linking,
 } from 'react-native';
 import { NavigationProp } from '@react-navigation/native';
 import { supabase } from '../lib/supabase';
@@ -20,20 +21,81 @@ interface Trick {
   name: string;
   difficulty: string;
   category: string;
+  tutorial_url: string;
 }
 
-// Sample tricks library
+// Sample tricks library with tutorial videos
 const TRICKS_LIBRARY: Trick[] = [
-  { id: 'ollie', name: 'Ollie', difficulty: 'Beginner', category: 'Basic' },
-  { id: 'kickflip', name: 'Kickflip', difficulty: 'Intermediate', category: 'Flip' },
-  { id: 'heelflip', name: 'Heelflip', difficulty: 'Intermediate', category: 'Flip' },
-  { id: 'pop-shuvit', name: 'Pop Shuvit', difficulty: 'Beginner', category: 'Shuvit' },
-  { id: '360-flip', name: '360 Flip', difficulty: 'Advanced', category: 'Flip' },
-  { id: 'boardslide', name: 'Boardslide', difficulty: 'Intermediate', category: 'Grind' },
-  { id: '50-50', name: '50-50 Grind', difficulty: 'Beginner', category: 'Grind' },
-  { id: 'nosegrind', name: 'Nosegrind', difficulty: 'Advanced', category: 'Grind' },
-  { id: 'manual', name: 'Manual', difficulty: 'Beginner', category: 'Balance' },
-  { id: 'nollie', name: 'Nollie', difficulty: 'Intermediate', category: 'Basic' },
+  {
+    id: 'ollie',
+    name: 'Ollie',
+    difficulty: 'Beginner',
+    category: 'Basic',
+    tutorial_url: 'https://www.youtube.com/watch?v=QkeOAcj8Y5k'
+  },
+  {
+    id: 'kickflip',
+    name: 'Kickflip',
+    difficulty: 'Intermediate',
+    category: 'Flip',
+    tutorial_url: 'https://www.youtube.com/watch?v=339k4XEvbxY'
+  },
+  {
+    id: 'heelflip',
+    name: 'Heelflip',
+    difficulty: 'Intermediate',
+    category: 'Flip',
+    tutorial_url: 'https://www.youtube.com/watch?v=LZAr1vBu8p4'
+  },
+  {
+    id: 'pop-shuvit',
+    name: 'Pop Shuvit',
+    difficulty: 'Beginner',
+    category: 'Shuvit',
+    tutorial_url: 'https://www.youtube.com/watch?v=9dN3aS_6rCk'
+  },
+  {
+    id: '360-flip',
+    name: '360 Flip',
+    difficulty: 'Advanced',
+    category: 'Flip',
+    tutorial_url: 'https://www.youtube.com/watch?v=tNfr0_AExNg'
+  },
+  {
+    id: 'boardslide',
+    name: 'Boardslide',
+    difficulty: 'Intermediate',
+    category: 'Grind',
+    tutorial_url: 'https://www.youtube.com/watch?v=2Kl0nGwsU5Y'
+  },
+  {
+    id: '50-50',
+    name: '50-50 Grind',
+    difficulty: 'Beginner',
+    category: 'Grind',
+    tutorial_url: 'https://www.youtube.com/watch?v=cOJQg0zXRhw'
+  },
+  {
+    id: 'nosegrind',
+    name: 'Nosegrind',
+    difficulty: 'Advanced',
+    category: 'Grind',
+    tutorial_url: 'https://www.youtube.com/watch?v=gKfFU7GZJIM'
+  },
+  {
+    id: 'manual',
+    name: 'Manual',
+    difficulty: 'Beginner',
+    category: 'Balance',
+    tutorial_url: 'https://www.youtube.com/watch?v=OcspKTYYpLo'
+  },
+  {
+    id: 'nollie',
+    name: 'Nollie',
+    difficulty: 'Intermediate',
+    category: 'Basic',
+    tutorial_url: 'https://www.youtube.com/watch?v=OUMi8FIgfwY'
+  },
 ];
 
 export default function TricksLibraryScreen({ navigation }: Props) {
@@ -221,6 +283,12 @@ export default function TricksLibraryScreen({ navigation }: Props) {
                   <Text style={styles.trickMeta}>
                     {trick.category} • {trick.difficulty}
                   </Text>
+                  <TouchableOpacity
+                    style={styles.tutorialButton}
+                    onPress={() => Linking.openURL(trick.tutorial_url)}
+                  >
+                    <Text style={styles.tutorialButtonText}>📹 Watch Tutorial</Text>
+                  </TouchableOpacity>
                 </View>
                 <View style={styles.statusButtons}>
                   {['not-started', 'learning', 'landed', 'mastered'].map((s) => (
@@ -380,6 +448,19 @@ const styles = StyleSheet.create({
   trickMeta: {
     fontSize: 12,
     color: '#666',
+  },
+  tutorialButton: {
+    marginTop: 8,
+    backgroundColor: '#d2673d',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 6,
+    alignSelf: 'flex-start',
+  },
+  tutorialButtonText: {
+    fontSize: 12,
+    color: '#fff',
+    fontWeight: '600',
   },
   statusButtons: {
     flexDirection: 'row',
