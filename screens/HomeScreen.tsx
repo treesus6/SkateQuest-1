@@ -38,6 +38,7 @@ export default function HomeScreen({ navigation }: Props) {
     { icon: '🗺️', title: 'Discover', subtitle: 'Find skateparks near you', screen: 'Map' },
     { icon: '➕', title: 'Add Spot', subtitle: 'Submit a new skatepark', screen: 'AddSpot' },
     { icon: '🎯', title: 'Challenges', subtitle: 'Complete tricks & earn XP', screen: 'Challenges' },
+    { icon: '📱', title: 'Feed', subtitle: 'See what others are landing', screen: 'Feed' },
     { icon: '👥', title: 'Crews', subtitle: 'Join or create a crew', screen: 'Crews' },
     { icon: '📅', title: 'Events', subtitle: 'Upcoming skate events', screen: 'Events' },
     { icon: '🛒', title: 'Shops', subtitle: 'Find local skate shops', screen: 'Shops' },
