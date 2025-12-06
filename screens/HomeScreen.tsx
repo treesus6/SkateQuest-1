@@ -36,6 +36,7 @@ export default function HomeScreen({ navigation }: Props) {
 
   const menuItems = [
     { icon: '🗺️', title: 'Discover', subtitle: 'Find skateparks near you', screen: 'Map' },
+    { icon: '🛹', title: 'Sessions', subtitle: 'Track your skate sessions', screen: 'Sessions' },
     { icon: '➕', title: 'Add Spot', subtitle: 'Submit a new skatepark', screen: 'AddSpot' },
     { icon: '🎯', title: 'Challenges', subtitle: 'Complete tricks & earn XP', screen: 'Challenges' },
     { icon: '📱', title: 'Feed', subtitle: 'See what others are landing', screen: 'Feed' },
