@@ -29,7 +29,7 @@ export default function ProfileScreen({ navigation }: Props) {
 
   const loadProfile = async () => {
     if (!user) return;
-    
+
     try {
       const { data, error } = await supabase
         .from('profiles')
@@ -41,11 +41,80 @@ export default function ProfileScreen({ navigation }: Props) {
         setProfile(data);
         setUsername(data.username || '');
         setBio(data.bio || '');
+        await checkAndAwardBadges(data);
+        await checkAndUpdateStreak(data);
       }
     } catch (error) {
       // Profile doesn't exist yet
     } finally {
       setLoading(false);
+    }
+  };
+
+  const checkAndAwardBadges = async (profileData: any) => {
+    const existingBadges = profileData.badges || [];
+    const newBadges = [];
+
+    // Define all possible badges
+    const badges = [
+      { id: 'first_spot', name: 'First Spot', desc: 'Added your first spot', condition: () => profileData.spots_added >= 1 },
+      { id: '100_xp', name: '100 XP', desc: 'Earned 100 XP', condition: () => profileData.xp >= 100 },
+      { id: '500_xp', name: '500 XP', desc: 'Earned 500 XP', condition: () => profileData.xp >= 500 },
+      { id: '1000_xp', name: '1000 XP', desc: 'Earned 1000 XP', condition: () => profileData.xp >= 1000 },
+      { id: 'first_challenge', name: 'Challenge Accepted', desc: 'Completed first challenge', condition: () => profileData.challenges_completed >= 1 },
+      { id: '10_challenges', name: 'Challenge Master', desc: 'Completed 10 challenges', condition: () => profileData.challenges_completed >= 10 },
+      { id: '5_day_streak', name: '5-Day Streak', desc: '5 consecutive days', condition: () => profileData.streak_days >= 5 },
+      { id: '10_day_streak', name: '10-Day Streak', desc: '10 consecutive days', condition: () => profileData.streak_days >= 10 },
+      { id: '30_day_streak', name: 'Dedicated', desc: '30 consecutive days', condition: () => profileData.streak_days >= 30 },
+    ];
+
+    // Check each badge
+    for (const badge of badges) {
+      if (!existingBadges.find((b: any) => b.id === badge.id) && badge.condition()) {
+        newBadges.push({ id: badge.id, name: badge.name, desc: badge.desc, earned_at: new Date().toISOString() });
+      }
+    }
+
+    // Award new badges
+    if (newBadges.length > 0) {
+      const updatedBadges = [...existingBadges, ...newBadges];
+      await supabase
+        .from('profiles')
+        .update({ badges: updatedBadges })
+        .eq('id', user?.id);
+
+      setProfile({ ...profileData, badges: updatedBadges });
+
+      Alert.alert(
+        'New Badge!',
+        `You earned: ${newBadges.map(b => b.name).join(', ')}`,
+        [{ text: 'Awesome!', style: 'default' }]
+      );
+    }
+  };
+
+  const checkAndUpdateStreak = async (profileData: any) => {
+    const today = new Date().toISOString().split('T')[0];
+    const lastSessionDate = profileData.last_session_date;
+
+    if (!lastSessionDate || lastSessionDate !== today) {
+      const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
+      let newStreak = 1;
+
+      if (lastSessionDate === yesterday) {
+        // Continue streak
+        newStreak = (profileData.streak_days || 0) + 1;
+      }
+
+      await supabase
+        .from('profiles')
+        .update({
+          last_session_date: today,
+          streak_days: newStreak,
+        })
+        .eq('id', user?.id);
+
+      setProfile({ ...profileData, streak_days: newStreak, last_session_date: today });
     }
   };
 
@@ -104,6 +173,29 @@ export default function ProfileScreen({ navigation }: Props) {
           <View style={styles.statBox}>
             <Text style={styles.statNumber}>{profile?.streak_days || 0}</Text>
             <Text style={styles.statLabel}>Day Streak</Text>
+          </View>
+        </View>
+
+        {/* Badges Section */}
+        <View style={styles.badgesSection}>
+          <Text style={styles.sectionTitle}>🏅 Badges ({profile?.badges?.length || 0})</Text>
+          <View style={styles.badgesGrid}>
+            {profile?.badges && profile.badges.length > 0 ? (
+              profile.badges.map((badge: any) => (
+                <View key={badge.id} style={styles.badge}>
+                  <Text style={styles.badgeEmoji}>
+                    {badge.id.includes('xp') ? '⭐' :
+                     badge.id.includes('challenge') ? '🎯' :
+                     badge.id.includes('streak') ? '🔥' :
+                     badge.id.includes('spot') ? '📍' : '🏅'}
+                  </Text>
+                  <Text style={styles.badgeName}>{badge.name}</Text>
+                  <Text style={styles.badgeDesc}>{badge.desc}</Text>
+                </View>
+              ))
+            ) : (
+              <Text style={styles.noBadges}>No badges earned yet. Keep skating to earn some!</Text>
+            )}
           </View>
         </View>
 
@@ -250,5 +342,52 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: '600',
+  },
+  badgesSection: {
+    backgroundColor: '#fff',
+    margin: 15,
+    padding: 20,
+    borderRadius: 12,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 15,
+    color: '#333',
+  },
+  badgesGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 10,
+  },
+  badge: {
+    backgroundColor: '#f0f0f0',
+    borderRadius: 12,
+    padding: 12,
+    alignItems: 'center',
+    width: '30%',
+    minWidth: 100,
+  },
+  badgeEmoji: {
+    fontSize: 32,
+    marginBottom: 8,
+  },
+  badgeName: {
+    fontSize: 12,
+    fontWeight: 'bold',
+    color: '#333',
+    textAlign: 'center',
+    marginBottom: 4,
+  },
+  badgeDesc: {
+    fontSize: 10,
+    color: '#666',
+    textAlign: 'center',
+  },
+  noBadges: {
+    color: '#999',
+    fontSize: 14,
+    textAlign: 'center',
+    padding: 20,
   },
 });
